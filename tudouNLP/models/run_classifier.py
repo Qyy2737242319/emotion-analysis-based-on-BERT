@@ -39,7 +39,7 @@ FLAGS = flags.FLAGS
 flags.DEFINE_string('label_dict','./tudouNLP/models/label2id.pkl','id2label.pkl name')
 flags.DEFINE_list('label_list',None," the new data s label list")
 flags.DEFINE_string(
-    "data_dir", "./tudouNLP/models/output",
+    "data_dir", "./datasets",
     "The input data dir. Should contain the .tsv files (or other data files) "
     "for the task.")
 
@@ -76,7 +76,7 @@ flags.DEFINE_integer(
 
 flags.DEFINE_bool("do_train", False, "Whether to run training.")
 
-flags.DEFINE_bool("do_eval", False, "Whether to run eval on the dev set.")
+flags.DEFINE_bool("do_eval", True, "Whether to run eval on the dev set.")
 
 flags.DEFINE_bool(
     "do_predict", True,
@@ -202,7 +202,7 @@ class DataProcessor(object):
     @classmethod
     def _read_pair_data(cls, input_file, quotechar=None):
         """Reads a tab separated value file."""
-        with tf.compat.v1.gfile.Open(input_file, "r") as f:#r改为rb，二进制模式
+        with tf.compat.v1.gfile.Open(input_file, "r") as f:
             reader = csv.reader(f, delimiter="\t", quotechar=quotechar)
             lines = []
             for line in reader:
@@ -213,10 +213,10 @@ class DataProcessor(object):
     @classmethod
     def _read_classify_data(cls, input_file, quotechar=None):
         """Reads a tab separated value file."""
-        file_in = open(input_file, "rb")
+        file_in = open(input_file, "rb")#r改为rb，二进制模式
         lines = []
         for line in file_in:
-            lines.append(line.decode("utf-8").split("\t"))#gbk解码改为utf-8解码
+            lines.append(line.replace(b"\r\n",b"").decode("utf-8").split(' '))#gbk解码改为utf-8解码
         return lines
 
     # 序列标注任务数据读取
@@ -369,6 +369,7 @@ class classify_text(DataProcessor):
             if set_type == 'test':
                 label = '0'
             else:
+                print(line)
                 label = tokenization.convert_to_unicode(line[1].strip())
             examples.append(
                 InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
