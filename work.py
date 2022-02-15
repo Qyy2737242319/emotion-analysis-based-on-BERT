@@ -1,11 +1,12 @@
 import os
 import tudouNLP.models.predict as p
+import tudouNLP
 #os.chdir('../.././UPCnlp')
 #情感分析
-texts="今天天气还可以".split(' ')
-predictor=p.sentence('./tudouNLP/models/model/sentiment_model')
-result=predictor.sentiment(texts)
-print(result)
+#texts="今天天气还可以".split(' ')
+#predictor=p.sentence('./tudouNLP/models/model/sentiment_model')
+#result=predictor.sentiment(texts)
+#print(result)
 #分词
 #texts=["在山东青岛，位于长江西路的中国石油大学教务处，王新哲、操应长、查明正在参观邃智科技有限公司！","德玛西亚带领着他的子民在瓦罗兰大陆，与瑞兹展开了殊死搏斗"]
 #predictor=p.tagger('./model')
@@ -17,3 +18,5 @@ print(result)
 #命名实体识别
 #predictor=p.tagger('./model')
 #predictor.ner(texts)
+trainer=tudouNLP.models.train.train(task_name='classify',data_dir='datasets',model_dir='tudouNLP/models/model/sentiment_model',output_dir='output',label_list='[0,1]')
+trainer()

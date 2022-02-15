@@ -37,7 +37,7 @@ FLAGS = flags.FLAGS
 
 ## Required parameters
 flags.DEFINE_string(
-    "data_dir", "./tudouNLP/models/output",#此处绝对路径为工程文件夹最上层路径，故相对路径也不一样
+    "data_dir", "./datasets",#此处绝对路径为工程文件夹最上层路径，故相对路径也不一样
     "The input data dir. Should contain the .tsv files (or other data files) "
     "for the task.")
 
@@ -67,12 +67,12 @@ flags.DEFINE_bool(
     "models and False for cased models.")
 
 flags.DEFINE_integer(
-    "max_seq_length", 128,
+    "max_seq_length", 64,
     "The maximum total input sequence length after WordPiece tokenization. "
     "Sequences longer than this will be truncated, and sequences shorter "
     "than this will be padded.")
 
-flags.DEFINE_bool("do_train", False, "Whether to run training.")
+flags.DEFINE_bool("do_train", True, "Whether to run training.")
 
 flags.DEFINE_bool("do_eval", False, "Whether to run eval on the dev set.")
 
@@ -80,15 +80,15 @@ flags.DEFINE_bool(
     "do_predict", True,
     "Whether to run the model in inference mode on the test set.")
 
-flags.DEFINE_integer("train_batch_size", 32, "Total batch size for training.")
+flags.DEFINE_integer("train_batch_size", 1, "Total batch size for training.")
 
-flags.DEFINE_integer("eval_batch_size", 8, "Total batch size for eval.")
+flags.DEFINE_integer("eval_batch_size", 1, "Total batch size for eval.")
 
-flags.DEFINE_integer("predict_batch_size", 8, "Total batch size for predict.")
+flags.DEFINE_integer("predict_batch_size", 1, "Total batch size for predict.")
 
 flags.DEFINE_float("learning_rate", 5e-5, "The initial learning rate for Adam.")
 
-flags.DEFINE_float("num_train_epochs", 3.0,
+flags.DEFINE_float("num_train_epochs", 5,
                    "Total number of training epochs to perform.")
 
 flags.DEFINE_float(
@@ -204,7 +204,7 @@ class DataProcessor(object):
         file_in = open(input_file, "rb")
         lines = []
         for line in file_in:
-            lines.append(line.decode("utf-8").split("\t"))
+            lines.append(line.replace(b"\r\n",b"").decode("utf-8").split(' '))#gbk解码改为utf-8解码
         return lines
 
 
@@ -241,6 +241,7 @@ class classify_text(DataProcessor):
             if set_type == 'test':
                 label='0'
             else:
+                print(line)
                 label = tokenization.convert_to_unicode(line[1].strip())
             self.labels.add(label)
             examples.append(
@@ -438,7 +439,7 @@ def create_model(bert_config, is_training, input_ids, input_mask, segment_ids,
     with tf.compat.v1.variable_scope("loss"):
         if is_training:
             # I.e., 0.1 dropout
-            output_layer = tf.nn.dropout(output_layer, keep_prob=0.9)
+            output_layer = tf.nn.dropout(output_layer, rate=0.9)
 
         logits = tf.matmul(output_layer, output_weights, transpose_b=True)
         logits = tf.nn.bias_add(logits, output_bias)

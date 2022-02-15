@@ -35,12 +35,12 @@ class tagger(object):
             os.system('python pos_tag.py \
                         --task_name=ner \
                         --do_predict=true \
-                        --data_dir=./tudouNLP/models/output \
+                        --data_dir=./tudouNLP/datasets \
                         --vocab_file=./vocab.txt \
                         --bert_config_file=./bert_config.json \
                         --init_checkpoint=./tudouNLP/models/model/ner_model/model \
-                        --max_seq_length=128 \
-                        --train_batch_size=32 \
+                        --max_seq_length=64 \
+                        --train_batch_size=1 \
                         --learning_rate=2e-5 \
                         --output_dir=./tudouNLP/models/output'.format(model_path))
 
@@ -73,12 +73,12 @@ class tagger(object):
             os.system('python pos_tag.py \
                                --task_name=tag \
                                --do_predict=true \
-                               --data_dir=./tudouNLP/models/output \
+                               --data_dir=./tudouNLP/datasets \
                                --vocab_file=./vocab.txt \
                                --bert_config_file=./bert_config.json \
                                --init_checkpoint=./tudouNLP/models/model/tag_model/model \
-                               --max_seq_length=128 \
-                               --train_batch_size=32 \
+                               --max_seq_length=64 \
+                               --train_batch_size=1 \
                                --learning_rate=2e-5 \
                                --output_dir=./tudouNLP/models/output'.format(model_path))
 
@@ -137,12 +137,12 @@ class sentence(object):
             os.system('python sentence.py \
                           --task_name=classify \
                           --do_predict=true \
-                          --data_dir=./tudouNLP/models/output \
+                          --data_dir=./tudouNLP/datasets \
                           --vocab_file=./tudouNLP/models/vocab.txt \
                           --bert_config_file=./tudouNLP/models/bert_config.json \
                           --init_checkpoint=./tudouNLP/models/model/sentiment_model/model \
-                          --max_seq_length=128 \
-                          --train_batch_size=32 \
+                          --max_seq_length=64 \
+                          --train_batch_size=1 \
                           --learning_rate=2e-5 \
                           --output_dir=./tudouNLP/models/output'.format(model_path))
             #print(os.getcwd())
@@ -168,12 +168,12 @@ class sentence(object):
             os.system('python sentence.py \
                           --task_name=pair \
                           --do_predict=true \
-                          --data_dir=./tudouNLP/models/output \
+                          --data_dir=./tudouNLP/datasets \
                           --vocab_file=./vocab.txt \
                           --bert_config_file=./bert_config.json \
-                          --init_checkpoint={} \
-                          --max_seq_length=128 \
-                          --train_batch_size=32 \
+                          --init_checkpoint=./model/sentiment_model/model \
+                          --max_seq_length=64 \
+                          --train_batch_size=1 \
                           --learning_rate=2e-5 \
                           --output_dir=./tudouNLP/models/output'.format(model_path))
 

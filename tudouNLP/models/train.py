@@ -1,6 +1,6 @@
 import os
 import sys
-
+sys.path.append('f:/Program Files (x86)/tudouNLP/')
 from tudouNLP.tools import ner_predict_utils
 from tudouNLP.tools import tag_predict_utils
 from tudouNLP.tools import sentiment_predict_utils
@@ -9,8 +9,8 @@ from tudouNLP.tools import sentiment_predict_utils
 class train(object):
     def __init__(self,task_name,data_dir,model_dir,output_dir,
                  label_dict='label2id.pkl',label_list=None,
-                 eval=True,max_seq_length=128,
-                 learning_rate=2e-5,batch_size=32):
+                 eval=True,max_seq_length=64,
+                 learning_rate=2e-5,batch_size=1):
         '''
         训练函数
         :param task_name:任务名：目前包括实体识别ner，序列标注tag，句子分类classify，句子配对pair
@@ -62,14 +62,14 @@ class train(object):
                       --task_name={} \
                       --do_train=true \
                       --do_eval=true \
-                      --data_dir=./tudouNLP/models/output \
+                      --data_dir=./datasets \
                       --vocab_file=./vocab.txt \
                       --bert_config_file=./bert_config.json \
-                      --init_checkpoint=./model/pre_trained_model/checkpoint \
-                      --max_seq_length={} \
-                      --train_batch_size=8 \
+                      --init_checkpoint=./tudouNLP/models/model/pre_trained_model/bert_model.ckpt \
+                      --max_seq_length=64 \
+                      --train_batch_size=1 \
                       --learning_rate=0.0001 \
-                      --output_dir={}'.format(self.label_dict,
+                      --output_dir=./output'.format(self.label_dict,
                                               self.label_list,
                                               self.task_name,
                                               self.data_dir,
@@ -84,14 +84,14 @@ class train(object):
                                  --label_list={} \
                                  --task_name={} \
                                  --do_train=true \
-                                 --data_dir=./tudouNLP/models/output \
+                                 --data_dir=./datasets \
                                  --vocab_file=./vocab.txt \
                                  --bert_config_file=./bert_config.json \
-                                 --init_checkpoint=./model/pre_trained_model/checkpoint \
-                                 --max_seq_length={} \
-                                 --train_batch_size=8 \
+                                 --init_checkpoint=./tudouNLP/models/model/pre_trained_model/bert_model.ckpt \
+                                 --max_seq_length=64 \
+                                 --train_batch_size=1 \
                                  --learning_rate=0.0001 \
-                                 --output_dir={}'.format(self.label_dict,
+                                 --output_dir=./output'.format(self.label_dict,
                                                          self.label_list,
                                                          self.task_name,
                                                          self.data_dir,
@@ -107,12 +107,12 @@ class train(object):
                                          --label_list={} \
                                          --task_name={} \
                                          --do_predict=true \
-                                         --data_dir=./tudouNLP/models/output \
+                                         --data_dir=./datasets \
                                          --vocab_file=./vocab.txt \
                                          --bert_config_file=./bert_config.json \
-                                         --init_checkpoint=./model/sentiment_model/checkpoint \
-                                         --max_seq_length={} \
-                                         --train_batch_size=8 \
+                                         --init_checkpoint=./model/sentiment_model/bert_model.ckpt \
+                                         --max_seq_length=64 \
+                                         --train_batch_size=1 \
                                          --learning_rate=0.0001 \
                                          --output_dir=./tudouNLP/models/output'.format(self.label_dict,
                                                                  self.label_list,

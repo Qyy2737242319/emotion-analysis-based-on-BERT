@@ -20,6 +20,7 @@ def convert(input_file,output_file):
             for word, tag in zip(words, tags):
                 f.write(word+' '+tag+'\n')
             f.write('\n')
+
 if __name__ == '__main__':
     parser=argparse.ArgumentParser(description="将分词标注数据转换为bert可以读取的数据格式")
     parser.add_argument('input_file',type=str,help="输入文件")
